@@ -1,0 +1,71 @@
+﻿@page "/Registro"
+@page "/Registro/{PrioridadId:int}"
+@inject prioridadBLL prioridadBLL
+@using RegistroBonyAuto.Models
+
+<div class="container">
+   <h3>Registro de Prioridades</h3>
+   <label>ID de la Prioridad</label>
+   <input  type="text" @bind-value="prioridad.PrioridadId"> <button @onclick="Buscar"> Buscar</button><br>
+   <h2>                                         </h2>
+
+
+   <label>Descripcion</label>
+   <input type="text" @bind-value="prioridad.Descripcion"><br>
+   <h2>                                         </h2>
+
+   <label>Dias Compromiso</label>
+   <input type="text" @bind-value="prioridad.DiasCompromiso"><br>
+   <h2>                                         </h2>
+
+   <div>
+    <button @onclick="Nuevo">Nuevo</button>
+    <button @onclick="Guardar">Guardar</button>
+    <button @onclick="Eliminar">Eliminar</button>
+   </div>
+</div>
+<h2>                    </h2>
+<SurveyPrompt Title="REGISTRO DE BONY AUTO" />
+
+@code {
+[Parameter]
+public int PrioridadId{get;set;}
+public Prioridad prioridad {get;set;} = new Prioridad();
+protected override void OnInitialized()
+{
+   if(PrioridadId>0)
+   {
+      this.prioridad.PrioridadId=this.PrioridadId;
+      Buscar();
+   }
+}
+
+        
+
+public void Guardar()
+{
+   prioridadBLL.Guardar(prioridad);
+   Nuevo();
+}
+public void Nuevo()
+{
+   this.prioridad=new Prioridad();
+}
+
+public void Eliminar()
+{
+   prioridadBLL.Eliminar(this.prioridad);
+   Nuevo();
+}
+public void Buscar()
+{
+   var PrioridadEncontrada = prioridadBLL.Buscar(prioridad.PrioridadId);
+   if(PrioridadEncontrada != null)
+   {
+      this.prioridad=PrioridadEncontrada;
+   }
+}
+
+}
+
+
